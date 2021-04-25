@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prepare": "git config --local core.hooksPath .git/hooks",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
@@ -38,6 +39,10 @@
     "prettier": "^2.2.1",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
+    "stylelint": "^13.13.0",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-standard": "^22.0.0",
+    "stylelint-prettier": "^1.2.0",
     "typescript": "~4.1.5",
     "vue-jest": "^5.0.0-0"
   },
@@ -45,8 +50,11 @@
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
+    "*.{css,scss,vue}": [
+      "stylelint"
+    ],
     "*.{js,jsx,vue,ts,tsx}": [
-      "vue-cli-service lint",
+      "vue-cli-service lint --max-warnings=0",
       "git add"
     ]
   }
