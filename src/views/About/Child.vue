@@ -23,6 +23,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, computed, watchEffect } from 'vue';
+import axios from 'axios';
 
 interface State {
   todos: string[];
@@ -44,8 +45,10 @@ export default defineComponent({
       return [...state.todos].sort();
     });
 
-    const addTodo = () => {
+    const addTodo = async () => {
       state.todos.push(state.inputValue);
+      const res = await axios.get('http://localhost:5000/v1/users/4');
+      state.inputValue = JSON.stringify(res.data);
     };
 
     const removeTodo = (value: string) => {
