@@ -1,31 +1,75 @@
 <template>
   <div>
-    <p>詳細</p>
+    <p>詳細 {{ id }}</p>
     <template v-if="!user">
       <p>読込中</p>
     </template>
     <template v-else>
       <p>{{ user.id }}</p>
       <p>{{ user.name }}</p>
+      <input v-model="name" />
     </template>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount } from 'vue';
+import {
+  computed,
+  defineComponent,
+  onBeforeMount,
+  onBeforeUnmount,
+  onBeforeUpdate,
+  onMounted,
+  onUnmounted,
+  onUpdated,
+} from 'vue';
 import { useStore } from 'vuex';
 import { IUser } from '@/entities/user';
-
-interface Props {
-  id: number;
-}
+import { onBeforeRouteUpdate } from 'vue-router';
 
 export default defineComponent({
-  setup(props: Props) {
+  props: {
+    id: {
+      type: Number,
+      required: true,
+    },
+  },
+  setup(props) {
     const store = useStore();
 
+    const init = (id: number) => {
+      store.dispatch('users/fetchUser', id);
+    };
+
     onBeforeMount(() => {
-      store.dispatch('users/fetchOne', { id: props.id });
+      console.log('onBeforeMount');
+    });
+
+    onMounted(() => {
+      console.log('onMounted');
+      init(props.id);
+    });
+
+    onBeforeUpdate(() => {
+      console.log('onBeforeUpdate');
+    });
+
+    onUpdated(() => {
+      console.log('onUpdated');
+    });
+
+    onBeforeUnmount(() => {
+      console.log('onBeforeUnmount');
+    });
+
+    onUnmounted(() => {
+      console.log('onUnmounted');
+    });
+
+    onBeforeRouteUpdate((to, from, next) => {
+      console.log('onBeforeRouteUpdate');
+      init(Number(to.params.id));
+      next();
     });
 
     const user = computed((): IUser | null => {

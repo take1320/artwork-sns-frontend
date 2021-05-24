@@ -5,12 +5,12 @@ import { RootState } from '@/store/index';
 
 interface State {
   list: IUser[];
-  show: IUser | null;
+  user: IUser | null;
 }
 
 const state: State = {
   list: [],
-  show: null,
+  user: null,
 };
 
 const actions: ActionTree<State, RootState> = {
@@ -18,22 +18,26 @@ const actions: ActionTree<State, RootState> = {
     const { data } = await axios.get<IUser[]>(
       'http://localhost:5000/v1/users/'
     );
-    commit('fetchList', data);
+    commit('setList', data);
   },
-  async fetchOne({ commit }, id: number) {
-    const { data } = await axios.get<IUser>(
-      'http://localhost:5000/v1/users/' + id
-    );
-    commit('fetchOne', data);
+  async fetchUser({ commit }, id: number) {
+    const endPoint = 'http://localhost:5000/v1/users/' + id;
+    const { data } = await axios.get<IUser>(endPoint);
+    commit('setUser', data);
   },
+  // async update({ commit }, user: IUser) {
+  // const endPoint = 'http://localhost:5000/v1/users/' + id;
+  // const { data } = await axios.get<IUser>(endPoint);
+  // commit('setUser', data);
+  // },
 };
 
 const mutations: MutationTree<State> = {
-  fetchList(state, users: IUser[]) {
+  setList(state, users: IUser[]) {
     state.list = users;
   },
-  fetchOne(state, user: IUser) {
-    state.show = user;
+  setUser(state, user: IUser) {
+    state.user = user;
   },
 };
 

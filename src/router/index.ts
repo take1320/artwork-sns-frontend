@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
         name: 'UserDetail',
         component: UserDetail,
         props: (route) => ({
-          id: route.query.id,
+          id: Number(route.params.id),
         }),
       },
     ],

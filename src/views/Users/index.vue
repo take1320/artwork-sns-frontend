@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>ユーザ一覧</p>
-    <input type="button" @click="onClickFetchList" value="fetchUser!" />
+    <input type="button" value="fetchUser!" />
     <template v-for="user in users" :key="user.id">
       <div>
         <p>{{ user.name }}</p>
@@ -10,12 +10,12 @@
         }}</router-link>
       </div>
     </template>
-    <router-view name="UserDetail"></router-view>
+    <router-view />
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { RouterView } from 'vue-router';
 import { IUser } from '@/entities/user';
@@ -29,17 +29,21 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
+    const init = () => {
+      store.dispatch('users/fetchList');
+    };
+
+    onMounted(() => {
+      console.log('onMounted');
+      init();
+    });
+
     const users = computed((): IUser[] => {
       return store.state.users.list;
     });
 
-    const onClickFetchList = () => {
-      store.dispatch('users/fetchList');
-    };
-
     return {
       users,
-      onClickFetchList,
     };
   },
 });
