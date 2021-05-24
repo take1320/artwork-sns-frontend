@@ -25,11 +25,12 @@ const actions: ActionTree<State, RootState> = {
     const { data } = await axios.get<IUser>(endPoint);
     commit('setUser', data);
   },
-  // async update({ commit }, user: IUser) {
-  // const endPoint = 'http://localhost:5000/v1/users/' + id;
-  // const { data } = await axios.get<IUser>(endPoint);
-  // commit('setUser', data);
-  // },
+  async updateUser(_, user: IUser) {
+    const endPoint = 'http://localhost:5000/v1/users/' + user.id;
+    await axios.put<IUser>(endPoint, user);
+    this.dispatch('users/fetchList');
+    this.dispatch('users/fetchUser', user.id);
+  },
 };
 
 const mutations: MutationTree<State> = {

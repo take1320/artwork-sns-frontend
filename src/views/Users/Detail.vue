@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="background: yellow">
     <p>詳細 {{ id }}</p>
     <template v-if="!user">
       <p>読込中</p>
@@ -7,7 +7,10 @@
     <template v-else>
       <p>{{ user.id }}</p>
       <p>{{ user.name }}</p>
-      <input v-model="name" />
+      <router-link :to="{ name: pageName.UserEdit, params: { id: user.id } }">
+        編集する
+      </router-link>
+      <router-view />
     </template>
   </div>
 </template>
@@ -25,9 +28,13 @@ import {
 } from 'vue';
 import { useStore } from 'vuex';
 import { IUser } from '@/entities/user';
-import { onBeforeRouteUpdate } from 'vue-router';
+import { onBeforeRouteUpdate, RouterView } from 'vue-router';
+import { pageName } from '@/router';
 
 export default defineComponent({
+  components: {
+    RouterView,
+  },
   props: {
     id: {
       type: Number,
@@ -73,10 +80,11 @@ export default defineComponent({
     });
 
     const user = computed((): IUser | null => {
-      return store.state.users.show;
+      return store.state.users.user;
     });
 
     return {
+      pageName,
       user,
     };
   },

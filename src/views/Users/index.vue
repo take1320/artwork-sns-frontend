@@ -5,9 +5,11 @@
     <template v-for="user in users" :key="user.id">
       <div>
         <p>{{ user.name }}</p>
-        <router-link :to="{ name: 'UserDetail', params: { id: user.id } }">{{
-          user.id
-        }}</router-link>
+        <router-link
+          :to="{ name: pageName.UserDetail, params: { id: user.id } }"
+        >
+          {{ user.id }}
+        </router-link>
       </div>
     </template>
     <router-view />
@@ -17,9 +19,9 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import { RouterView } from 'vue-router';
+import { RouterView, RouterLink } from 'vue-router';
 import { IUser } from '@/entities/user';
-import { RouterLink } from 'vue-router';
+import { pageName } from '@/router/index';
 
 export default defineComponent({
   components: {
@@ -44,6 +46,7 @@ export default defineComponent({
 
     return {
       users,
+      pageName,
     };
   },
 });
