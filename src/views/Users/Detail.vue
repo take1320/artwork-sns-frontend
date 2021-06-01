@@ -30,6 +30,7 @@ import { useStore } from 'vuex';
 import { IUser } from '@/entities/user';
 import { onBeforeRouteUpdate, RouterView } from 'vue-router';
 import { pageName } from '@/router';
+import { USERS_ACTION_TYPE } from '@/store/users/storeType';
 
 export default defineComponent({
   components: {
@@ -45,7 +46,7 @@ export default defineComponent({
     const store = useStore();
 
     const init = (id: number) => {
-      store.dispatch('users/fetchUser', id);
+      store.dispatch(USERS_ACTION_TYPE.FETCH_USER, id);
     };
 
     onBeforeMount(() => {

@@ -22,6 +22,7 @@ import { useStore } from 'vuex';
 import { RouterView, RouterLink } from 'vue-router';
 import { IUser } from '@/entities/user';
 import { pageName } from '@/router/index';
+import { USERS_ACTION_TYPE } from '@/store/users/storeType';
 
 export default defineComponent({
   components: {
@@ -32,7 +33,7 @@ export default defineComponent({
     const store = useStore();
 
     const init = () => {
-      store.dispatch('users/fetchList');
+      store.dispatch(USERS_ACTION_TYPE.FETCH_USERS);
     };
 
     onMounted(() => {
@@ -41,7 +42,7 @@ export default defineComponent({
     });
 
     const users = computed((): IUser[] => {
-      return store.state.users.list;
+      return store.state.users.users;
     });
 
     return {

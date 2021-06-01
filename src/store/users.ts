@@ -1,43 +1,40 @@
 import { ActionTree, Module, MutationTree } from 'vuex';
-import { IUser } from '@/entities/user';
-import axios from 'axios';
 import { RootState } from '@/store/index';
+import * as UserRepository from '@/repositories/user';
+import { UpdateForm } from '@/store/types/user';
+import { UpdateUser, User } from '@/models/user';
+import { ACTION_TYPE, MUTATION_TYPE } from '@/store/users/storeType';
 
 interface State {
-  list: IUser[];
-  user: IUser | null;
+  users: User[];
+  user: User | null;
 }
 
 const state: State = {
-  list: [],
+  users: [],
   user: null,
 };
 
 const actions: ActionTree<State, RootState> = {
-  async fetchList({ commit }) {
-    const { data } = await axios.get<IUser[]>(
-      'http://localhost:5000/v1/users/'
-    );
-    commit('setList', data);
+  [ACTION_TYPE.FETCH_USERS]: async ({ commit }) => {
+    const users = await UserRepository.findAll();
+    commit(MUTATION_TYPE.SET_USERS, users);
   },
-  async fetchUser({ commit }, id: number) {
-    const endPoint = 'http://localhost:5000/v1/users/' + id;
-    const { data } = await axios.get<IUser>(endPoint);
-    commit('setUser', data);
+  [ACTION_TYPE.FETCH_USER]: async ({ commit }, id: number) => {
+    const user = await UserRepository.findById(id);
+    commit(MUTATION_TYPE.SET_USER, user);
   },
-  async updateUser(_, user: IUser) {
-    const endPoint = 'http://localhost:5000/v1/users/' + user.id;
-    await axios.put<IUser>(endPoint, user);
-    this.dispatch('users/fetchList');
-    this.dispatch('users/fetchUser', user.id);
+  [ACTION_TYPE.UPDATE_USER]: async (_, form: UpdateForm) => {
+    const updateUser: UpdateUser = form;
+    await UserRepository.update(updateUser);
   },
 };
 
 const mutations: MutationTree<State> = {
-  setList(state, users: IUser[]) {
-    state.list = users;
+  [MUTATION_TYPE.SET_USERS]: (state, users: User[]) => {
+    state.users = users;
   },
-  setUser(state, user: IUser) {
+  [MUTATION_TYPE.SET_USER]: (state, user: User) => {
     state.user = user;
   },
 };

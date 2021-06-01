@@ -12,6 +12,6 @@ const state: RootState = {
 export default createStore<RootState>({
   state,
   modules: {
-    users,
+    users: users,
   },
 });

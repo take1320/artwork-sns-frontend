@@ -16,6 +16,7 @@ import { defineComponent, onMounted, toRefs, watchEffect } from 'vue';
 import { useStore } from 'vuex';
 import { IUser } from '@/entities/user';
 import { onBeforeRouteUpdate } from 'vue-router';
+import { USERS_ACTION_TYPE } from '@/store/users/storeType';
 
 export default defineComponent({
   props: {
@@ -29,11 +30,13 @@ export default defineComponent({
 
     const store = useStore();
     const init = (id: number) => {
-      store.dispatch('users/fetchUser', id);
+      store.dispatch(USERS_ACTION_TYPE.FETCH_USER, id);
     };
 
-    const onClickUpdate = (user: IUser) => {
-      store.dispatch('users/updateUser', user);
+    const onClickUpdate = async (user: IUser) => {
+      await store.dispatch(USERS_ACTION_TYPE.UPDATE_USER, user);
+      await store.dispatch(USERS_ACTION_TYPE.FETCH_USER, user.id);
+      await store.dispatch(USERS_ACTION_TYPE.FETCH_USERS);
     };
 
     onMounted(() => {
