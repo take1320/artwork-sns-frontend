@@ -43,7 +43,7 @@ export const create = async (user: CreateUser): Promise<User> => {
     name: user.name,
   };
   const res = await axios
-    .put<CreateResponse>(endPoint, payload)
+    .post<CreateResponse>(endPoint, payload)
     .then(({ data }) => data);
 
   return toUserModel(res);

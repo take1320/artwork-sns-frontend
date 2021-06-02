@@ -1,8 +1,8 @@
 import { ActionTree, Module, MutationTree } from 'vuex';
 import { RootState } from '@/store/index';
 import * as UserRepository from '@/repositories/user';
-import { UpdateForm } from '@/store/types/user';
-import { UpdateUser, User } from '@/models/user';
+import { CreateForm, UpdateForm } from '@/store/types/user';
+import { CreateUser, UpdateUser, User } from '@/models/user';
 import { ACTION_TYPE, MUTATION_TYPE } from '@/store/users/storeType';
 
 interface State {
@@ -27,6 +27,10 @@ const actions: ActionTree<State, RootState> = {
   [ACTION_TYPE.UPDATE_USER]: async (_, form: UpdateForm) => {
     const updateUser: UpdateUser = form;
     await UserRepository.update(updateUser);
+  },
+  [ACTION_TYPE.CREATE_USER]: async (_, form: CreateForm) => {
+    const createUser: CreateUser = form;
+    await UserRepository.create(createUser);
   },
 };
 

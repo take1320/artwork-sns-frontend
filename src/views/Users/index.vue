@@ -13,6 +13,7 @@
       </div>
     </template>
     <router-view />
+    <create-form />
   </div>
 </template>
 
@@ -23,11 +24,13 @@ import { RouterView, RouterLink } from 'vue-router';
 import { IUser } from '@/entities/user';
 import { pageName } from '@/router/index';
 import { USERS_ACTION_TYPE } from '@/store/users/storeType';
+import CreateForm from '@/views/Users/Create.vue';
 
 export default defineComponent({
   components: {
     RouterView,
     RouterLink,
+    CreateForm,
   },
   setup() {
     const store = useStore();
