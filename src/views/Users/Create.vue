@@ -11,8 +11,6 @@ import { defineComponent, toRefs, reactive } from 'vue';
 import { useStore } from 'vuex';
 import { USERS_ACTION_TYPE } from '@/store/users/storeType';
 import { CreateForm } from '@/store/types/user';
-import { useRouter } from 'vue-router';
-import { pageName } from '@/router';
 
 type Data = {
   form: CreateForm;
@@ -21,15 +19,17 @@ type Data = {
 export default defineComponent({
   setup() {
     const data = reactive<Data>({
-      form: { name: '' },
+      form: {
+        name: '',
+      },
     });
 
-    const router = useRouter();
     const store = useStore();
 
     const onClickCreate = async (form: CreateForm) => {
       await store.dispatch(USERS_ACTION_TYPE.CREATE_USER, form);
-      await router.push({ name: pageName.Users });
+      data.form.name = '';
+      await store.dispatch(USERS_ACTION_TYPE.FETCH_USERS);
     };
 
     return {

@@ -48,3 +48,8 @@ export const create = async (user: CreateUser): Promise<User> => {
 
   return toUserModel(res);
 };
+
+export const deleteById = async (id: number): Promise<void> => {
+  const endPoint = 'http://localhost:5000/v1/users/' + id;
+  await axios.delete(endPoint);
+};

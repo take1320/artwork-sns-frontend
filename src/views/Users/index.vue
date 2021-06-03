@@ -20,7 +20,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import { RouterView, RouterLink } from 'vue-router';
+import { RouterView, RouterLink, onBeforeRouteUpdate } from 'vue-router';
 import { IUser } from '@/entities/user';
 import { pageName } from '@/router/index';
 import { USERS_ACTION_TYPE } from '@/store/users/storeType';
@@ -42,6 +42,11 @@ export default defineComponent({
     onMounted(() => {
       console.log('onMounted');
       init();
+    });
+
+    onBeforeRouteUpdate((to, from, next) => {
+      init();
+      next();
     });
 
     const users = computed((): IUser[] => {

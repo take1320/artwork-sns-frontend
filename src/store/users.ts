@@ -32,6 +32,9 @@ const actions: ActionTree<State, RootState> = {
     const createUser: CreateUser = form;
     await UserRepository.create(createUser);
   },
+  [ACTION_TYPE.DELETE_USER]: async (_, id: number) => {
+    await UserRepository.deleteById(id);
+  },
 };
 
 const mutations: MutationTree<State> = {

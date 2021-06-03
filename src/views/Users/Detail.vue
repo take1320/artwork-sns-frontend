@@ -11,6 +11,7 @@
         編集する
       </router-link>
       <router-view />
+      <input type="button" @click="onClickDelete(user.id)" value="削除" />
     </template>
   </div>
 </template>
@@ -28,7 +29,7 @@ import {
 } from 'vue';
 import { useStore } from 'vuex';
 import { IUser } from '@/entities/user';
-import { onBeforeRouteUpdate, RouterView } from 'vue-router';
+import { useRouter, onBeforeRouteUpdate, RouterView } from 'vue-router';
 import { pageName } from '@/router';
 import { USERS_ACTION_TYPE } from '@/store/users/storeType';
 
@@ -75,7 +76,6 @@ export default defineComponent({
     });
 
     onBeforeRouteUpdate((to, from, next) => {
-      console.log('onBeforeRouteUpdate');
       init(Number(to.params.id));
       next();
     });
@@ -84,9 +84,18 @@ export default defineComponent({
       return store.state.users.user;
     });
 
+    const router = useRouter();
+    const onClickDelete = async (id: number) => {
+      await store.dispatch(USERS_ACTION_TYPE.DELETE_USER, id);
+      await router.push({
+        name: pageName.Users,
+      });
+    };
+
     return {
       pageName,
       user,
+      onClickDelete,
     };
   },
 });
