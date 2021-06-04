@@ -1,7 +1,8 @@
 <template>
   <div class="about">
-    <h1>This is an about page index</h1>
+    <h1>This is an about page users</h1>
     <a href="/about/child">here!!</a>
+    <a href="/users">users page!!</a>
     <RouterView></RouterView>
   </div>
 </template>
