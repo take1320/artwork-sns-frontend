@@ -3,6 +3,7 @@ import {
   CreateResponse,
   IndexResponse,
   ShowResponse,
+  ShowResponseType,
   toUserModel,
   UpdateRequest,
   UpdateResponse,
@@ -33,7 +34,10 @@ export class UserRepository implements IUserRepository {
 
   async findById(id: number): Promise<User> {
     const url = 'http://localhost:5000/v1/users/' + id;
-    const res = await this.httpClient.get<ShowResponse>(url);
+    const res = await this.httpClient.getWithType<ShowResponse>(
+      ShowResponseType,
+      url
+    );
 
     return toUserModel(res);
   }
