@@ -13,11 +13,11 @@ import { HttpClient } from '@/repositories/apis/httpClient';
 //
 // register(HttpClient);
 
-export const TOKEN_NAME = {
+export const TOKEN = {
   HttpClient: HttpClient.name,
 };
 
-container.register(TOKEN_NAME.HttpClient, {
+container.register(TOKEN.HttpClient, {
   useClass: HttpClient,
 });
 

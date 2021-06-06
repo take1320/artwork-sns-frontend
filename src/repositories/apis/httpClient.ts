@@ -10,18 +10,18 @@ export interface IHttpClient {
 
 @injectable()
 export class HttpClient implements IHttpClient {
-  async get<T>(endpoint: string): Promise<T> {
-    return axios.get<T>(endpoint).then(({ data }) => data);
+  async get<T>(url: string): Promise<T> {
+    return axios.get<T>(url).then(({ data }) => data);
   }
 
   // eslint-disable-next-line
-  async put<T>(endpoint: string, payload: any): Promise<T> {
-    return axios.put<T>(endpoint, payload).then(({ data }) => data);
+  async put<T>(url: string, data: any): Promise<T> {
+    return axios.put<T>(url, data).then(({ data }) => data);
   }
 
   // eslint-disable-next-line
-  async post<T>(endpoint: string, payload: any): Promise<T> {
-    return axios.post<T>(endpoint, payload).then(({ data }) => data);
+  async post<T>(url: string, data: any): Promise<T> {
+    return axios.post<T>(url, data).then(({ data }) => data);
   }
 
   async delete<T>(endpoint: string): Promise<T> {

@@ -10,7 +10,7 @@ import {
 import { User, UpdateUser, CreateUser } from '@/models/user';
 import { IHttpClient } from '@/repositories/apis/httpClient';
 import { inject, injectable } from 'tsyringe';
-import { TOKEN_NAME } from '@/containerRegistry';
+import { TOKEN } from '@/containerRegistry';
 
 export interface IUserRepository {
   findAll(): Promise<User[]>;
@@ -22,44 +22,44 @@ export interface IUserRepository {
 
 @injectable()
 export class UserRepository implements IUserRepository {
-  constructor(@inject(TOKEN_NAME.HttpClient) private httpClient: IHttpClient) {}
+  constructor(@inject(TOKEN.HttpClient) private httpClient: IHttpClient) {}
 
   async findAll(): Promise<User[]> {
     // TODO: ドメインを環境別に変更
-    const endPoint = 'http://localhost:5000/v1/users/';
-    const res = await this.httpClient.get<IndexResponse>(endPoint);
+    const url = 'http://localhost:5000/v1/users/';
+    const res = await this.httpClient.get<IndexResponse>(url);
     return res.map((user) => toUserModel(user));
   }
 
   async findById(id: number): Promise<User> {
-    const endPoint = 'http://localhost:5000/v1/users/' + id;
-    const res = await this.httpClient.get<ShowResponse>(endPoint);
+    const url = 'http://localhost:5000/v1/users/' + id;
+    const res = await this.httpClient.get<ShowResponse>(url);
 
     return toUserModel(res);
   }
 
   async update(user: UpdateUser): Promise<User> {
-    const endPoint = 'http://localhost:5000/v1/users/' + user.id;
-    const payload: UpdateRequest = {
+    const url = 'http://localhost:5000/v1/users/' + user.id;
+    const data: UpdateRequest = {
       name: user.name,
     };
-    const res = await this.httpClient.put<UpdateResponse>(endPoint, payload);
+    const res = await this.httpClient.put<UpdateResponse>(url, data);
 
     return toUserModel(res);
   }
 
   async create(user: CreateUser): Promise<User> {
-    const endPoint = 'http://localhost:5000/v1/users/';
-    const payload: CreateRequest = {
+    const url = 'http://localhost:5000/v1/users/';
+    const data: CreateRequest = {
       name: user.name,
     };
-    const res = await this.httpClient.put<CreateResponse>(endPoint, payload);
+    const res = await this.httpClient.put<CreateResponse>(url, data);
 
     return toUserModel(res);
   }
 
   async deleteById(id: number): Promise<void> {
-    const endPoint = 'http://localhost:5000/v1/users/' + id;
-    await this.httpClient.delete(endPoint);
+    const url = 'http://localhost:5000/v1/users/' + id;
+    await this.httpClient.delete(url);
   }
 }
