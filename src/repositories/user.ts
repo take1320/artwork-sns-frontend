@@ -1,12 +1,15 @@
 import {
   CreateRequest,
   CreateResponse,
+  CreateResponseType,
   IndexResponse,
+  IndexResponseType,
   ShowResponse,
   ShowResponseType,
   toUserModel,
   UpdateRequest,
   UpdateResponse,
+  UpdateResponseType,
 } from '@/repositories/types/api/user';
 import { User, UpdateUser, CreateUser } from '@/models/user';
 import { IHttpClient } from '@/repositories/apis/httpClient';
@@ -28,16 +31,17 @@ export class UserRepository implements IUserRepository {
   async findAll(): Promise<User[]> {
     // TODO: ドメインを環境別に変更
     const url = 'http://localhost:5000/v1/users/';
-    const res = await this.httpClient.get<IndexResponse>(url);
+    const res = await this.httpClient.get<IndexResponse>(
+      url,
+      IndexResponseType
+    );
     return res.map((user) => toUserModel(user));
   }
 
   async findById(id: number): Promise<User> {
+    // throw new Error('error!');
     const url = 'http://localhost:5000/v1/users/' + id;
-    const res = await this.httpClient.getWithType<ShowResponse>(
-      ShowResponseType,
-      url
-    );
+    const res = await this.httpClient.get<ShowResponse>(url, ShowResponseType);
 
     return toUserModel(res);
   }
@@ -47,7 +51,11 @@ export class UserRepository implements IUserRepository {
     const data: UpdateRequest = {
       name: user.name,
     };
-    const res = await this.httpClient.put<UpdateResponse>(url, data);
+    const res = await this.httpClient.put<UpdateResponse>(
+      url,
+      data,
+      UpdateResponseType
+    );
 
     return toUserModel(res);
   }
@@ -57,7 +65,11 @@ export class UserRepository implements IUserRepository {
     const data: CreateRequest = {
       name: user.name,
     };
-    const res = await this.httpClient.put<CreateResponse>(url, data);
+    const res = await this.httpClient.put<CreateResponse>(
+      url,
+      data,
+      CreateResponseType
+    );
 
     return toUserModel(res);
   }
