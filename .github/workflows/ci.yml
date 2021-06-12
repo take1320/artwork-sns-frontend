@@ -38,8 +38,5 @@ jobs:
       - name: Eslint
         run: yarn lint
 
-      - name: ls
-        run: ls -l
-
       - name: Unit test
         run: yarn test:unit
