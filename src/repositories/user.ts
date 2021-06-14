@@ -65,7 +65,7 @@ export class UserRepository implements IUserRepository {
     const data: CreateRequest = {
       name: user.name,
     };
-    const res = await this.httpClient.put<CreateResponse>(
+    const res = await this.httpClient.post<CreateResponse>(
       url,
       data,
       CreateResponseType
