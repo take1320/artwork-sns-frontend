@@ -17,13 +17,13 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs, watchEffect } from 'vue';
 import { useStore } from 'vuex';
-import { IUser } from '@/entities/user';
 import { onBeforeRouteUpdate } from 'vue-router';
 import { USERS_ACTION_TYPE } from '@/store/users/storeType';
 import { ValidationError } from '@/errors/ValidateError';
 import { ValidationErrorItem } from '@/store/users/validator';
 import { UpdateForm } from '@/store/types/user';
 import { deepCopy } from '@/utils/deepCopy';
+import { ApiRequestError } from '@/errors/ApiRequestError';
 
 type Data = {
   editing: UpdateForm;
@@ -53,19 +53,23 @@ export default defineComponent({
       store.dispatch(USERS_ACTION_TYPE.FETCH_USER, id);
     };
 
-    const onClickUpdate = async (user: IUser) => {
-      try {
-        await store.dispatch(USERS_ACTION_TYPE.UPDATE_USER, user);
-        await store.dispatch(USERS_ACTION_TYPE.FETCH_USER, user.id);
-        await store.dispatch(USERS_ACTION_TYPE.FETCH_USERS);
-        errors.value = [];
-      } catch (e) {
-        if (e instanceof ValidationError) {
-          errors.value = e.errors;
-        } else {
-          throw e;
-        }
-      }
+    const onClickUpdate = async (value: UpdateForm) => {
+      await store
+        .dispatch(USERS_ACTION_TYPE.UPDATE_USER, value)
+        .then(async () => {
+          await store.dispatch(USERS_ACTION_TYPE.FETCH_USER, value.id);
+          await store.dispatch(USERS_ACTION_TYPE.FETCH_USERS);
+          errors.value = [];
+        })
+        .catch((e) => {
+          if (e instanceof ValidationError) {
+            errors.value = e.errors;
+          } else if (e instanceof ApiRequestError) {
+            console.log(JSON.stringify(e.errors));
+          } else {
+            throw e;
+          }
+        });
     };
 
     onMounted(() => {
@@ -79,7 +83,7 @@ export default defineComponent({
 
     watchEffect(() => {
       console.log('watchEffect!');
-      editing.value = deepCopy<IUser>(store.state.users.user);
+      editing.value = deepCopy<UpdateForm>(store.state.users.user);
     });
 
     const findError = (name: string): ValidationErrorItem | undefined => {
