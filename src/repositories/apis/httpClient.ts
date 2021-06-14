@@ -1,15 +1,20 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { injectable } from 'tsyringe';
 import { Type } from 'io-ts';
 import { PathReporter } from 'io-ts/PathReporter';
 import { isLeft } from 'fp-ts/Either';
+import { ApiRequestError } from '@/errors/ApiRequestError';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export interface IHttpClient {
   get<T>(endpoint: string, type?: Type<any>): Promise<T>;
+
   put<T>(endpoint: string, payload: any, type?: Type<any>): Promise<T>;
+
   post<T>(endpoint: string, payload: any, type?: Type<any>): Promise<T>;
+
   delete<T>(endpoint: string, type?: Type<any>): Promise<T>;
 }
 
@@ -22,19 +27,40 @@ export class HttpClient implements IHttpClient {
   }
 
   async put<T>(url: string, data: any, type: Type<any>): Promise<T> {
-    const res = await axios.put<T>(url, data).then(({ data }) => data);
+    const res = await axios
+      .put<T>(url, data)
+      .then(({ data }) => data)
+      .catch((error: AxiosError) => {
+        const errRes = error.response;
+        if (!errRes) throw new Error('httpClient undefined response.');
+        throw new ApiRequestError(errRes.status, errRes.data);
+      });
     if (type) this.validateResponse(type, res);
     return res;
   }
 
   async post<T>(url: string, data: any, type: Type<any>): Promise<T> {
-    const res = axios.post<T>(url, data).then(({ data }) => data);
+    const res = await axios
+      .post<T>(url, data)
+      .then(({ data }) => data)
+      .catch((error: AxiosError) => {
+        const errRes = error.response;
+        if (!errRes) throw new Error('httpClient undefined response.');
+        throw new ApiRequestError(errRes.status, errRes.data);
+      });
     if (type) this.validateResponse(type, res);
     return res;
   }
 
   async delete<T>(endpoint: string, type: Type<any>): Promise<T> {
-    const res = axios.delete<T>(endpoint).then(({ data }) => data);
+    const res = await axios
+      .delete<T>(endpoint)
+      .then(({ data }) => data)
+      .catch((error: AxiosError) => {
+        const errRes = error.response;
+        if (!errRes) throw new Error('httpClient undefined response.');
+        throw new ApiRequestError(errRes.status, errRes.data);
+      });
     if (type) this.validateResponse(type, res);
     return res;
   }
