@@ -6,7 +6,10 @@ import { CreateUser, UpdateUser, User } from '@/models/user';
 import { ACTION_TYPE, MUTATION_TYPE } from '@/store/users/storeType';
 import { IUserRepository, UserRepository } from '@/repositories/user';
 import { container } from 'tsyringe';
-import { validateUpdateForm } from '@/store/users/validator';
+import {
+  validateCreateForm,
+  validateUpdateForm,
+} from '@/store/users/validator';
 
 interface State {
   users: User[];
@@ -35,6 +38,7 @@ const actions: ActionTree<State, RootState> = {
     await userRepository.update(updateUser);
   },
   [ACTION_TYPE.CREATE_USER]: async (_, form: CreateForm) => {
+    validateCreateForm(form);
     const createUser: CreateUser = form;
     await userRepository.create(createUser);
   },
