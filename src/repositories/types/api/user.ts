@@ -20,6 +20,6 @@ export type CreateResponse = t.TypeOf<typeof CreateResponseType>;
 export const toUserModel = (user: User): UserModel => ({
   id: user.id,
   name: user.name,
-  createdAt: dayjs(user.created_at).toDate(),
-  updatedAt: dayjs(user.updated_at).toDate(),
+  createdAt: dayjs(user.createdAt).toDate(),
+  updatedAt: dayjs(user.updatedAt).toDate(),
 });

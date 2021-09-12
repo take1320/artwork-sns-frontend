@@ -30,7 +30,7 @@ export class UserRepository implements IUserRepository {
 
   async findAll(): Promise<User[]> {
     // TODO: ドメインを環境別に変更
-    const url = 'http://localhost:5000/v1/users/';
+    const url = 'http://localhost:5000/users/';
     const res = await this.httpClient.get<IndexResponse>(
       url,
       IndexResponseType
@@ -40,14 +40,14 @@ export class UserRepository implements IUserRepository {
 
   async findById(id: number): Promise<User> {
     // throw new Error('error!');
-    const url = 'http://localhost:5000/v1/users/' + id;
+    const url = 'http://localhost:5000/users/' + id;
     const res = await this.httpClient.get<ShowResponse>(url, ShowResponseType);
 
     return toUserModel(res);
   }
 
   async update(user: UpdateUser): Promise<User> {
-    const url = 'http://localhost:5000/v1/users/' + user.id;
+    const url = 'http://localhost:5000/users/' + user.id;
     const data: UpdateRequest = {
       name: user.name,
     };
@@ -61,7 +61,7 @@ export class UserRepository implements IUserRepository {
   }
 
   async create(user: CreateUser): Promise<User> {
-    const url = 'http://localhost:5000/v1/users/';
+    const url = 'http://localhost:5000/users/';
     const data: CreateRequest = {
       name: user.name,
     };
@@ -75,7 +75,7 @@ export class UserRepository implements IUserRepository {
   }
 
   async deleteById(id: number): Promise<void> {
-    const url = 'http://localhost:5000/v1/users/' + id;
+    const url = 'http://localhost:5000/users/' + id;
     await this.httpClient.delete(url);
   }
 }
