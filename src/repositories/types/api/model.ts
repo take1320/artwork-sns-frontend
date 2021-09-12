@@ -5,8 +5,8 @@ export const IdentifierType = t.type({
 });
 
 export const RecordingDateType = t.type({
-  created_at: t.string,
-  updated_at: t.string,
+  createdAt: t.string,
+  updatedAt: t.string,
 });
 
 export const UserValuesType = t.type({
