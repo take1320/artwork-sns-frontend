@@ -24,7 +24,7 @@ import { RouterView, RouterLink, onBeforeRouteUpdate } from 'vue-router';
 import { IUser } from '@/entities/user';
 import { pageName } from '@/router/index';
 import { USERS_ACTION_TYPE } from '@/store/users/storeType';
-import CreateForm from '@/views/Users/Create.vue';
+import CreateForm from '@/components/pages/Users/Create.vue';
 
 export default defineComponent({
   components: {

@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import Home from '../views/Home.vue';
-import About from '../views/About/index.vue';
-import AboutChild from '../views/About/Child.vue';
-import Users from '../views/Users/index.vue';
-import UserDetail from '../views/Users/Detail.vue';
-import UserEdit from '../views/Users/Edit.vue';
+import Home from '@/components/pages/Home.vue';
+import About from '@/components/pages/About/index.vue';
+import AboutChild from '@/components/pages/About/Child.vue';
+import Users from '@/components/pages/Users/index.vue';
+import UserDetail from '@/components/pages/Users/Detail.vue';
+import UserEdit from '@/components/pages/Users/Edit.vue';
 
 export const pageName = {
   Users: 'Users',
