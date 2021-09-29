@@ -12,7 +12,7 @@ import {
   UpdateResponseType,
 } from '@/repositories/types/api/user';
 import { User, UpdateUser, CreateUser } from '@/models/user';
-import { IHttpClient } from '@/repositories/apis/httpClient';
+import type { IHttpClient } from '@/repositories/apis/httpClient';
 import { inject, injectable } from 'tsyringe';
 import { TOKEN } from '@/containerRegistry';
 

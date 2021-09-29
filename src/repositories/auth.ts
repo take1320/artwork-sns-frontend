@@ -2,7 +2,7 @@ import {
   AccessTokenResponse,
   AccessTokenResponseType,
 } from '@/repositories/types/api/auth';
-import { IHttpClient } from '@/repositories/apis/httpClient';
+import type { IHttpClient } from '@/repositories/apis/httpClient';
 import { inject, injectable } from 'tsyringe';
 import { TOKEN } from '@/containerRegistry';
 import { IAccessToken } from '@/entities/auth';
