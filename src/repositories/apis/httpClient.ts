@@ -21,7 +21,11 @@ export interface IHttpClient {
 @injectable()
 export class HttpClient implements IHttpClient {
   async get<T>(url: string, type?: Type<any>): Promise<T> {
-    const res = await axios.get<T>(url).then(({ data }) => data);
+    const res = await axios
+      .get<T>(url, {
+        withCredentials: true,
+      })
+      .then(({ data }) => data);
     if (type) this.validateResponse(type, res);
     return res;
   }

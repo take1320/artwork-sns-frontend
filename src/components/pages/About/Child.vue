@@ -47,7 +47,9 @@ export default defineComponent({
 
     const addTodo = async () => {
       state.todos.push(state.inputValue);
-      const res = await axios.get('http://localhost:5000/users/4');
+      const res = await axios.get(
+        'http://local.api.artworksns.com:5000/users/4'
+      );
       state.inputValue = JSON.stringify(res.data);
     };
 
