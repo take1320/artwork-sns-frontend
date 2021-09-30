@@ -70,4 +70,10 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  console.log('beforeEach:to', JSON.stringify(to));
+  console.log('beforeEach:from', JSON.stringify(from));
+  next();
+});
+
 export default router;

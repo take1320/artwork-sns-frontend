@@ -1,6 +1,6 @@
 <template>
   <div class="TopPage">
-    ログインボタン表示
+    ログイン状態: 未ログイン
     <a :href="loginUrl">ログインする</a>
   </div>
 </template>
