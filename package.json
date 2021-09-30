@@ -11,11 +11,13 @@
     "lint:fix": "vue-cli-service lint"
   },
   "dependencies": {
+    "@types/js-cookie": "^2.2.7",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "dayjs": "^1.10.5",
     "fp-ts": "^2.10.5",
     "io-ts": "^2.2.16",
+    "js-cookie": "^3.0.1",
     "reflect-metadata": "^0.1.13",
     "tsyringe": "^4.5.0",
     "vue": "^3.0.0",
