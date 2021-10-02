@@ -16,7 +16,6 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs, watchEffect } from 'vue';
-import { useStore } from 'vuex';
 import { onBeforeRouteUpdate } from 'vue-router';
 import { USERS_ACTION_TYPE } from '@/store/users/storeType';
 import { ValidationError } from '@/errors/ValidateError';
@@ -24,6 +23,7 @@ import { ValidationErrorItem } from '@/store/users/validator';
 import { UpdateForm } from '@/store/types/user';
 import { deepCopy } from '@/utils/deepCopy';
 import { ApiRequestError } from '@/errors/ApiRequestError';
+import { useStore } from '@/store';
 
 type Data = {
   editing: UpdateForm;

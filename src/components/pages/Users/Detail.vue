@@ -27,11 +27,11 @@ import {
   onUnmounted,
   onUpdated,
 } from 'vue';
-import { useStore } from 'vuex';
 import { IUser } from '@/entities/user';
 import { useRouter, onBeforeRouteUpdate, RouterView } from 'vue-router';
 import { pathName } from '@/router';
 import { USERS_ACTION_TYPE } from '@/store/users/storeType';
+import { useStore } from '@/store';
 
 export default defineComponent({
   components: {

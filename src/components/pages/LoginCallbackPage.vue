@@ -4,10 +4,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useStore } from 'vuex';
 import { AUTH_ACTION_TYPE } from '@/store/auth/storeType';
 import { useRouter } from 'vue-router';
 import { pathName } from '@/router';
+import { useStore } from '@/store';
 
 export default defineComponent({
   components: {},

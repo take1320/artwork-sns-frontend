@@ -12,8 +12,8 @@
 </template>
 
 <script lang="ts">
+import { useStore } from '@/store';
 import { defineComponent, reactive, toRefs } from 'vue';
-import { useStore } from 'vuex';
 
 type Data = {
   isLogin: boolean;

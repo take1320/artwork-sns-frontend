@@ -19,12 +19,12 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted } from 'vue';
-import { useStore } from 'vuex';
 import { RouterView, RouterLink, onBeforeRouteUpdate } from 'vue-router';
 import { IUser } from '@/entities/user';
 import { pathName } from '@/router/index';
 import { USERS_ACTION_TYPE } from '@/store/users/storeType';
 import CreateForm from '@/components/pages/Users/Create.vue';
+import { useStore } from '@/store';
 
 export default defineComponent({
   components: {

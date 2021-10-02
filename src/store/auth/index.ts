@@ -8,12 +8,12 @@ import { AuthRepository, IAuthRepository } from '@/repositories/auth';
 import Cookies from 'js-cookie';
 import { UnauthorizedError } from '@/errors/UnauthorizedError';
 
-interface IState {
+export interface IState {
   accessToken: IAccessToken | null;
   profile: IProfile | null;
 }
 
-const state: IState = {
+export const state: IState = {
   accessToken: null,
   profile: null,
 };
@@ -87,7 +87,7 @@ const mutations: MutationTree<IState> = {
   },
 };
 
-export const auth: Module<IState, RootState> = {
+export const module: Module<IState, RootState> = {
   namespaced: true,
   state,
   actions,
