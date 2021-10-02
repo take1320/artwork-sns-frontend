@@ -31,17 +31,18 @@ export class UserRepository implements IUserRepository {
   async findAll(): Promise<User[]> {
     // TODO: ドメインを環境別に変更
     const url = 'http://local.api.artworksns.com:5000/users/';
-    const res = await this.httpClient.get<IndexResponse>(
-      url,
-      IndexResponseType
-    );
+    const res = await this.httpClient.get<IndexResponse>(url, {
+      type: IndexResponseType,
+    });
     return res.map((user) => toUserModel(user));
   }
 
   async findById(id: number): Promise<User> {
     // throw new Error('error!');
     const url = 'http://local.api.artworksns.com:5000/users/' + id;
-    const res = await this.httpClient.get<ShowResponse>(url, ShowResponseType);
+    const res = await this.httpClient.get<ShowResponse>(url, {
+      type: ShowResponseType,
+    });
 
     return toUserModel(res);
   }
@@ -51,11 +52,9 @@ export class UserRepository implements IUserRepository {
     const data: UpdateRequest = {
       name: user.name,
     };
-    const res = await this.httpClient.put<UpdateResponse>(
-      url,
-      data,
-      UpdateResponseType
-    );
+    const res = await this.httpClient.put<UpdateResponse>(url, data, {
+      type: UpdateResponseType,
+    });
 
     return toUserModel(res);
   }
@@ -65,11 +64,9 @@ export class UserRepository implements IUserRepository {
     const data: CreateRequest = {
       name: user.name,
     };
-    const res = await this.httpClient.post<CreateResponse>(
-      url,
-      data,
-      CreateResponseType
-    );
+    const res = await this.httpClient.post<CreateResponse>(url, data, {
+      type: CreateResponseType,
+    });
 
     return toUserModel(res);
   }
