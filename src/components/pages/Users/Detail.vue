@@ -27,11 +27,11 @@ import {
   onUnmounted,
   onUpdated,
 } from 'vue';
-import { IUser } from '@/entities/user';
 import { useRouter, onBeforeRouteUpdate, RouterView } from 'vue-router';
 import { pathName } from '@/router';
 import { USERS_ACTION_TYPE } from '@/store/users/storeType';
 import { useStore } from '@/store';
+import { User } from '@/models/user';
 
 export default defineComponent({
   components: {
@@ -80,7 +80,7 @@ export default defineComponent({
       next();
     });
 
-    const user = computed((): IUser | null => {
+    const user = computed((): User | null => {
       return store.state.users.user;
     });
 
