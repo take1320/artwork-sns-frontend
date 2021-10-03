@@ -6,7 +6,7 @@
       <div>
         <p>{{ user.name }}</p>
         <router-link
-          :to="{ name: pageName.UserDetail, params: { id: user.id } }"
+          :to="{ name: pathName.UserDetail, params: { id: user.id } }"
         >
           {{ user.id }}
         </router-link>
@@ -19,12 +19,12 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted } from 'vue';
-import { useStore } from 'vuex';
 import { RouterView, RouterLink, onBeforeRouteUpdate } from 'vue-router';
-import { IUser } from '@/entities/user';
-import { pageName } from '@/router/index';
+import { pathName } from '@/router/index';
 import { USERS_ACTION_TYPE } from '@/store/users/storeType';
-import CreateForm from '@/views/Users/Create.vue';
+import CreateForm from '@/components/pages/Users/Create.vue';
+import { useStore } from '@/store';
+import { User } from '@/models/user';
 
 export default defineComponent({
   components: {
@@ -49,13 +49,13 @@ export default defineComponent({
       next();
     });
 
-    const users = computed((): IUser[] => {
+    const users = computed((): User[] => {
       return store.state.users.users;
     });
 
     return {
       users,
-      pageName,
+      pathName,
     };
   },
 });

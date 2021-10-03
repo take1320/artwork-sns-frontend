@@ -11,19 +11,19 @@ import {
   validateUpdateForm,
 } from '@/store/users/validator';
 
-interface State {
+export interface IState {
   users: User[];
   user: User | null;
 }
 
-const state: State = {
+export const state: IState = {
   users: [],
   user: null,
 };
 
 const userRepository: IUserRepository = container.resolve(UserRepository);
 
-const actions: ActionTree<State, RootState> = {
+const actions: ActionTree<IState, RootState> = {
   [ACTION_TYPE.FETCH_USERS]: async ({ commit }) => {
     const users = await userRepository.findAll();
     commit(MUTATION_TYPE.SET_USERS, users);
@@ -47,7 +47,7 @@ const actions: ActionTree<State, RootState> = {
   },
 };
 
-const mutations: MutationTree<State> = {
+const mutations: MutationTree<IState> = {
   [MUTATION_TYPE.SET_USERS]: (state, users: User[]) => {
     state.users = users;
   },
@@ -56,7 +56,7 @@ const mutations: MutationTree<State> = {
   },
 };
 
-export const users: Module<State, RootState> = {
+export const module: Module<IState, RootState> = {
   namespaced: true,
   state,
   actions,

@@ -7,7 +7,7 @@
     <template v-else>
       <p>{{ user.id }}</p>
       <p>{{ user.name }}</p>
-      <router-link :to="{ name: pageName.UserEdit, params: { id: user.id } }">
+      <router-link :to="{ name: pathName.UserEdit, params: { id: user.id } }">
         編集する
       </router-link>
       <router-view />
@@ -27,11 +27,11 @@ import {
   onUnmounted,
   onUpdated,
 } from 'vue';
-import { useStore } from 'vuex';
-import { IUser } from '@/entities/user';
 import { useRouter, onBeforeRouteUpdate, RouterView } from 'vue-router';
-import { pageName } from '@/router';
+import { pathName } from '@/router';
 import { USERS_ACTION_TYPE } from '@/store/users/storeType';
+import { useStore } from '@/store';
+import { User } from '@/models/user';
 
 export default defineComponent({
   components: {
@@ -80,7 +80,7 @@ export default defineComponent({
       next();
     });
 
-    const user = computed((): IUser | null => {
+    const user = computed((): User | null => {
       return store.state.users.user;
     });
 
@@ -88,12 +88,12 @@ export default defineComponent({
     const onClickDelete = async (id: number) => {
       await store.dispatch(USERS_ACTION_TYPE.DELETE_USER, id);
       await router.push({
-        name: pageName.Users,
+        name: pathName.Users,
       });
     };
 
     return {
-      pageName,
+      pathName,
       user,
       onClickDelete,
     };

@@ -12,7 +12,7 @@ import {
   UpdateResponseType,
 } from '@/repositories/types/api/user';
 import { User, UpdateUser, CreateUser } from '@/models/user';
-import { IHttpClient } from '@/repositories/apis/httpClient';
+import type { IHttpClient } from '@/repositories/apis/httpClient';
 import { inject, injectable } from 'tsyringe';
 import { TOKEN } from '@/containerRegistry';
 
@@ -30,52 +30,49 @@ export class UserRepository implements IUserRepository {
 
   async findAll(): Promise<User[]> {
     // TODO: ドメインを環境別に変更
-    const url = 'http://localhost:5000/users/';
-    const res = await this.httpClient.get<IndexResponse>(
-      url,
-      IndexResponseType
-    );
+    const url = 'http://local.api.artworksns.com:5000/users/';
+    const res = await this.httpClient.get<IndexResponse>(url, {
+      type: IndexResponseType,
+    });
     return res.map((user) => toUserModel(user));
   }
 
   async findById(id: number): Promise<User> {
     // throw new Error('error!');
-    const url = 'http://localhost:5000/users/' + id;
-    const res = await this.httpClient.get<ShowResponse>(url, ShowResponseType);
+    const url = 'http://local.api.artworksns.com:5000/users/' + id;
+    const res = await this.httpClient.get<ShowResponse>(url, {
+      type: ShowResponseType,
+    });
 
     return toUserModel(res);
   }
 
   async update(user: UpdateUser): Promise<User> {
-    const url = 'http://localhost:5000/users/' + user.id;
+    const url = 'http://local.api.artworksns.com:5000/users/' + user.id;
     const data: UpdateRequest = {
       name: user.name,
     };
-    const res = await this.httpClient.put<UpdateResponse>(
-      url,
-      data,
-      UpdateResponseType
-    );
+    const res = await this.httpClient.put<UpdateResponse>(url, data, {
+      type: UpdateResponseType,
+    });
 
     return toUserModel(res);
   }
 
   async create(user: CreateUser): Promise<User> {
-    const url = 'http://localhost:5000/users/';
+    const url = 'http://local.api.artworksns.com:5000/users/';
     const data: CreateRequest = {
       name: user.name,
     };
-    const res = await this.httpClient.post<CreateResponse>(
-      url,
-      data,
-      CreateResponseType
-    );
+    const res = await this.httpClient.post<CreateResponse>(url, data, {
+      type: CreateResponseType,
+    });
 
     return toUserModel(res);
   }
 
   async deleteById(id: number): Promise<void> {
-    const url = 'http://localhost:5000/users/' + id;
+    const url = 'http://local.api.artworksns.com:5000/users/' + id;
     await this.httpClient.delete(url);
   }
 }

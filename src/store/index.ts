@@ -1,17 +1,30 @@
-import { createStore } from 'vuex';
-import { users } from '@/store/users';
+import { createStore, ModuleTree, Store, useStore as baseUseStore } from 'vuex';
+import * as usersStore from '@/store/users';
+import * as authStore from '@/store/auth';
+import { InjectionKey } from 'vue';
 
 export interface RootState {
-  text: '';
+  auth: authStore.IState;
+  users: usersStore.IState;
 }
 
 const state: RootState = {
-  text: '',
+  auth: authStore.state,
+  users: usersStore.state,
+};
+
+const modules: ModuleTree<RootState> = {
+  auth: authStore.module,
+  users: usersStore.module,
 };
 
 export default createStore<RootState>({
   state,
-  modules: {
-    users: users,
-  },
+  modules,
 });
+
+export const key: InjectionKey<Store<RootState>> = Symbol();
+
+export const useStore = (): Store<RootState> => {
+  return baseUseStore(key);
+};

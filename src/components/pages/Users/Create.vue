@@ -11,12 +11,12 @@
 
 <script lang="ts">
 import { defineComponent, toRefs, reactive } from 'vue';
-import { useStore } from 'vuex';
 import { USERS_ACTION_TYPE } from '@/store/users/storeType';
 import { CreateForm } from '@/store/types/user';
 import { ValidationError } from '@/errors/ValidateError';
 import { ApiRequestError } from '@/errors/ApiRequestError';
 import { ValidationErrorItem } from '@/store/users/validator';
+import { useStore } from '@/store';
 
 type Data = {
   form: CreateForm;

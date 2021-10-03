@@ -1,12 +1,15 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import Home from '../views/Home.vue';
-import About from '../views/About/index.vue';
-import AboutChild from '../views/About/Child.vue';
-import Users from '../views/Users/index.vue';
-import UserDetail from '../views/Users/Detail.vue';
-import UserEdit from '../views/Users/Edit.vue';
+import About from '@/components/pages/About/index.vue';
+import AboutChild from '@/components/pages/About/Child.vue';
+import Users from '@/components/pages/Users/index.vue';
+import UserDetail from '@/components/pages/Users/Detail.vue';
+import UserEdit from '@/components/pages/Users/Edit.vue';
+import TopPage from '@/components/pages/TopPage.vue';
+import LoginCallbackPage from '@/components/pages/LoginCallbackPage.vue';
 
-export const pageName = {
+export const pathName = {
+  Top: 'Top',
+  LoginCallback: 'LoginCallback',
   Users: 'Users',
   UserDetail: 'UserDetail',
   UserEdit: 'UserEdit',
@@ -15,17 +18,22 @@ export const pageName = {
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: pathName.Top,
+    component: TopPage,
+  },
+  {
+    path: '/login/callback',
+    name: pathName.LoginCallback,
+    component: LoginCallbackPage,
   },
   {
     path: '/users',
-    name: pageName.Users,
+    name: pathName.Users,
     component: Users,
     children: [
       {
         path: ':id',
-        name: pageName.UserDetail,
+        name: pathName.UserDetail,
         component: UserDetail,
         props: (route) => ({
           id: Number(route.params.id),
@@ -33,7 +41,7 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: 'edit',
-            name: pageName.UserEdit,
+            name: pathName.UserEdit,
             component: UserEdit,
             props: (route) => ({
               id: Number(route.params.id),
@@ -60,6 +68,12 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  console.log('beforeEach:to', JSON.stringify(to));
+  console.log('beforeEach:from', JSON.stringify(from));
+  next();
 });
 
 export default router;

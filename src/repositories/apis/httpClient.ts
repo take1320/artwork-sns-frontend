@@ -1,67 +1,99 @@
-import axios, { AxiosError } from 'axios';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { injectable } from 'tsyringe';
 import { Type } from 'io-ts';
 import { PathReporter } from 'io-ts/PathReporter';
 import { isLeft } from 'fp-ts/Either';
 import { ApiRequestError } from '@/errors/ApiRequestError';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+type IRequestConfig = {
+  type?: Type<any>;
+  accessToken?: string;
+};
 
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export interface IHttpClient {
-  get<T>(endpoint: string, type?: Type<any>): Promise<T>;
+  get<T>(url: string, config?: IRequestConfig): Promise<T>;
 
-  put<T>(endpoint: string, payload: any, type?: Type<any>): Promise<T>;
+  put<T>(url: string, data: any, config?: IRequestConfig): Promise<T>;
 
-  post<T>(endpoint: string, payload: any, type?: Type<any>): Promise<T>;
+  post<T>(url: string, data: any, config?: IRequestConfig): Promise<T>;
 
-  delete<T>(endpoint: string, type?: Type<any>): Promise<T>;
+  delete<T>(url: string, config?: IRequestConfig): Promise<T>;
 }
 
 @injectable()
 export class HttpClient implements IHttpClient {
-  async get<T>(url: string, type?: Type<any>): Promise<T> {
-    const res = await axios.get<T>(url).then(({ data }) => data);
-    if (type) this.validateResponse(type, res);
+  async get<T>(url: string, config?: IRequestConfig): Promise<T> {
+    const headers = this.makeHeaders(config);
+    const res = await axios
+      .get<T>(url, {
+        withCredentials: true,
+        headers,
+      })
+      .then(({ data }) => data)
+      .catch((err: AxiosError) => {
+        if (err.response) {
+          throw new ApiRequestError(err.response.status, err.response.data);
+        } else {
+          throw err;
+        }
+      });
+    if (config?.type) this.validateResponse(config.type, res);
     return res;
   }
 
-  async put<T>(url: string, data: any, type: Type<any>): Promise<T> {
+  async put<T>(url: string, data: any, config: IRequestConfig): Promise<T> {
+    const headers = this.makeHeaders(config);
     const res = await axios
-      .put<T>(url, data)
+      .put<T>(url, data, {
+        headers,
+      })
       .then(({ data }) => data)
-      .catch((error: AxiosError) => {
-        const errRes = error.response;
-        if (!errRes) throw new Error('httpClient undefined response.');
-        throw new ApiRequestError(errRes.status, errRes.data);
+      .catch((err: AxiosError) => {
+        if (err.response) {
+          throw new ApiRequestError(err.response.status, err.response.data);
+        } else {
+          throw err;
+        }
       });
-    if (type) this.validateResponse(type, res);
+    if (config?.type) this.validateResponse(config.type, res);
     return res;
   }
 
-  async post<T>(url: string, data: any, type: Type<any>): Promise<T> {
+  async post<T>(url: string, data: any, config?: IRequestConfig): Promise<T> {
+    const headers = this.makeHeaders(config);
     const res = await axios
-      .post<T>(url, data)
+      .post<T>(url, data, {
+        headers,
+      })
       .then(({ data }) => data)
-      .catch((error: AxiosError) => {
-        const errRes = error.response;
-        if (!errRes) throw new Error('httpClient undefined response.');
-        throw new ApiRequestError(errRes.status, errRes.data);
+      .catch((err: AxiosError) => {
+        if (err.response) {
+          throw new ApiRequestError(err.response.status, err.response.data);
+        } else {
+          throw err;
+        }
       });
-    if (type) this.validateResponse(type, res);
+    if (config?.type) this.validateResponse(config.type, res);
     return res;
   }
 
-  async delete<T>(endpoint: string, type: Type<any>): Promise<T> {
+  async delete<T>(url: string, config?: IRequestConfig): Promise<T> {
+    const headers = this.makeHeaders(config);
     const res = await axios
-      .delete<T>(endpoint)
+      .delete<T>(url, {
+        headers,
+      })
       .then(({ data }) => data)
-      .catch((error: AxiosError) => {
-        const errRes = error.response;
-        if (!errRes) throw new Error('httpClient undefined response.');
-        throw new ApiRequestError(errRes.status, errRes.data);
+      .catch((err: AxiosError) => {
+        if (err.response) {
+          throw new ApiRequestError(err.response.status, err.response.data);
+        } else {
+          throw err;
+        }
       });
-    if (type) this.validateResponse(type, res);
+    if (config?.type) this.validateResponse(config.type, res);
     return res;
   }
 
@@ -70,5 +102,15 @@ export class HttpClient implements IHttpClient {
     if (isLeft(result)) {
       throw new Error(JSON.stringify(PathReporter.report(result)));
     }
+  }
+
+  makeHeaders(
+    config: IRequestConfig | undefined
+  ): AxiosRequestConfig['headers'] {
+    return config?.accessToken
+      ? {
+          Authorization: `Bearer ${config.accessToken}`,
+        }
+      : {};
   }
 }
