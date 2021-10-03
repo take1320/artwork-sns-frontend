@@ -2,7 +2,7 @@
   <div class="TopPage">
     <template v-if="isLogin">
       <div>ログイン状態:ログイン済み</div>
-      <a :href="loginUrl">ログアウトする</a>
+      <a @click="onClickLogoutButton">ログアウトする</a>
     </template>
     <template v-else>
       <div>未ログイン</div>
@@ -13,6 +13,7 @@
 
 <script lang="ts">
 import { useStore } from '@/store';
+import { AUTH_ACTION_TYPE } from '@/store/auth/storeType';
 import { defineComponent, reactive, toRefs } from 'vue';
 
 type Data = {
@@ -28,14 +29,21 @@ export default defineComponent({
         isLogin: false,
       })
     );
+    const store = useStore();
 
     const loginUrl = 'http://local.api.artworksns.com:5000/auth/login';
-    const store = useStore();
     isLogin.value = !!store.state.auth.profile;
+
+    const onClickLogoutButton = async () => {
+      // アクセストークンを削除した後、トップページへ遷移する
+      await store.dispatch(AUTH_ACTION_TYPE.DISCARD_ACCESS_TOKEN);
+      window.location.href = '/';
+    };
 
     return {
       isLogin,
       loginUrl,
+      onClickLogoutButton,
     };
   },
 });

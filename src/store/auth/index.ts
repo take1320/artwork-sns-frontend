@@ -44,7 +44,7 @@ const actions: ActionTree<IState, RootState> = {
   },
 
   // プロフィール（=ログインユーザ）を取得
-  [ACTION_TYPE.FETCH_PROFILE]: async ({ commit, state }) => {
+  [ACTION_TYPE.FETCH_PROFILE]: async ({ commit, state, dispatch }) => {
     if (!state.accessToken) {
       throw new Error('accessToken is null');
     }
@@ -57,8 +57,8 @@ const actions: ActionTree<IState, RootState> = {
     } catch (err) {
       if (err instanceof UnauthorizedError) {
         // TODO: 画面に認証失敗を表示する？
-        console.log('アクセストークンを削除');
-        commit(MUTATION_TYPE.SET_ACCESS_TOKEN, null);
+        console.log('認証エラーの場合はトークンを破棄する');
+        dispatch(ACTION_TYPE.DISCARD_ACCESS_TOKEN);
       } else {
         throw err;
       }
@@ -69,6 +69,11 @@ const actions: ActionTree<IState, RootState> = {
   [ACTION_TYPE.FETCH_ACCESS_TOKEN]: async ({ commit }) => {
     const accessToken: IAccessToken = await authRepository.fetchAccessToken();
     commit(MUTATION_TYPE.SET_ACCESS_TOKEN, accessToken);
+  },
+
+  // アクセストークンの破棄(=ログアウト)
+  [ACTION_TYPE.DISCARD_ACCESS_TOKEN]: async ({ commit }) => {
+    commit(MUTATION_TYPE.SET_ACCESS_TOKEN, null);
   },
 };
 
